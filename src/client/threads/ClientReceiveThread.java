@@ -21,7 +21,7 @@ public class ClientReceiveThread extends Thread{
             objectInputStream = client.getObjectInputStream();
             while (true) {
                 Message message = (Message) objectInputStream.readObject();
-                System.out.println(message);
+                System.out.println("\n" + message);
             }
         } catch (Exception e) {
             System.err.println("Error in Client receive:" + e);

@@ -14,11 +14,17 @@ public class ClientController {
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        assert(args.length == 2);
+        if(args.length != 2){
+            System.out.println("Error launching the client. Usage [host] [port]");
+            System.exit(1);
+        }
+        System.out.println("Client launching...");
+        System.out.println("Please enter your nickname");
         String name = sc.nextLine();
         String host = args[0];
         String portToSocket = args[1];
         Client client = new Client();
+        System.out.println("Welcome " + name);
         //Retrieve the client from the server
         try {
             Registry registry = LocateRegistry.getRegistry(host, 1010);

@@ -53,7 +53,7 @@ public class ServerController implements ServerControllerInterface{
                 objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
 
                 Client client = (Client) objectInputStream.readObject();
-
+                System.out.println(client.getName() + " just joined the chat");
                 client.setSocket(clientSocket);
                 client.setObjectInputStream(objectInputStream);
                 client.setObjectOutputStream(objectOutputStream);
@@ -88,5 +88,9 @@ public class ServerController implements ServerControllerInterface{
 
     public static List<Client> getConnectedClients() {
         return connectedClients;
+    }
+
+    public void logOut(Client client){
+        connectedClients.remove(client);
     }
 }

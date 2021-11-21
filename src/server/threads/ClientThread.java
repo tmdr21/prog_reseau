@@ -6,6 +6,7 @@ import server.controller.ServerController;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.SocketException;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,11 @@ public class ClientThread extends Thread{
                     objectOutputStream.writeObject(message);
                 }
             }
-        } catch (Exception e) {
+        } catch (SocketException se) {
+            System.out.println(client.getName() + " has left the chat");
+            server.logOut(client);
+            stop();
+        } catch (Exception e){
             System.err.println("Error in Client thread:" + e);
         }
     }

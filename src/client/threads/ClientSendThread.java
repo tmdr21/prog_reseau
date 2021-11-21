@@ -20,7 +20,9 @@ public class ClientSendThread extends Thread{
         try {
             objectOutputStream = client.getObjectOutputStream();
             while (true) {
+                System.out.print("Message to: ");
                 String addressee = sc.nextLine();
+                System.out.print("message body: ");
                 String body = sc.nextLine();
                 Message message = new Message(new Date(), new Client(addressee), client, body);
                 objectOutputStream.writeObject(message);
