@@ -1,7 +1,7 @@
 package server.threads;
 
-import client.model.Client;
-import client.model.Message;
+import model.Client;
+import model.Message;
 import server.controller.ServerController;
 
 import java.io.ObjectInputStream;

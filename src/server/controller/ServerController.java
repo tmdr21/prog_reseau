@@ -1,6 +1,6 @@
 package server.controller;
 
-import client.model.Client;
+import model.Client;
 import server.threads.ClientThread;
 
 import java.io.ObjectInputStream;
@@ -34,8 +34,8 @@ public class ServerController implements ServerControllerInterface{
 
         //Get the RMI ready
         try {
-            stub = (ServerControllerInterface) UnicastRemoteObject.exportObject(server, 1010);
-            Registry registry = LocateRegistry.createRegistry(1010);
+            stub = (ServerControllerInterface) UnicastRemoteObject.exportObject(server, 1099);
+            Registry registry = LocateRegistry.createRegistry(1099);
             registry.bind("loginClientByName", stub);
         }catch (Exception e){
             e.printStackTrace();

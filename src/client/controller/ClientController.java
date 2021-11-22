@@ -1,6 +1,6 @@
 package client.controller;
 
-import client.model.Client;
+import model.Client;
 import client.threads.ClientReceiveThread;
 import client.threads.ClientSendThread;
 import server.controller.ServerControllerInterface;
@@ -27,7 +27,7 @@ public class ClientController {
         System.out.println("Welcome " + name);
         //Retrieve the client from the server
         try {
-            Registry registry = LocateRegistry.getRegistry(host, 1010);
+            Registry registry = LocateRegistry.getRegistry(host, 1099);
             ServerControllerInterface stub = (ServerControllerInterface) registry.lookup("loginClientByName");
             client = stub.loginClientByName(name);
         } catch (Exception e) {

@@ -1,6 +1,6 @@
 package server.controller;
 
-import client.model.Client;
+import model.Client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

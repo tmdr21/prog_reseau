@@ -1,15 +1,11 @@
-package client.model;
+package model;
 
-import java.beans.Transient;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.net.Socket;
 import java.util.List;
 
-public class Client implements Serializable {
-    private long idClient;
-    private String name;
+public class Client extends Addressee{
     private List<Message> messagesSentList;
     private List<Message> messagesReceivedList;
     private transient Socket socket;
@@ -20,16 +16,11 @@ public class Client implements Serializable {
 
     }
     public Client(long idClient, String name) {
-        this.idClient = idClient;
-        this.name = name;
+        super(idClient, name);
     }
 
     public Client(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+        super(name);
     }
 
     public void setSocket(Socket socket){
@@ -72,11 +63,4 @@ public class Client implements Serializable {
         return objectInputStream;
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "idClient=" + idClient +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }
