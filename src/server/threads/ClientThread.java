@@ -2,6 +2,7 @@ package server.threads;
 
 import model.Addressee;
 import model.Client;
+import model.GroupChat;
 import model.Message;
 import server.controller.ServerController;
 import service.Service;
@@ -43,8 +44,12 @@ public class ClientThread extends Thread{
                         objectOutputStream = client.getObjectOutputStream();
                         message = new Message(new Date(), client, null, "This user is not online");
                     }else{
-                        System.out.println(message);
-                        objectOutputStream.writeObject(message);
+                        if(addressee instanceof Client) {
+                            System.out.println(message);
+                            objectOutputStream.writeObject(message);
+                        }else if(addressee instanceof GroupChat){
+                            //Broadcast message to all group members
+                        }
                     }
                 }
             }
