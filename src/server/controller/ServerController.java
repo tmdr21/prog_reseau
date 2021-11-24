@@ -1,5 +1,6 @@
 package server.controller;
 
+import dao.JpaUtil;
 import model.Client;
 import server.threads.ClientThread;
 
@@ -34,7 +35,7 @@ public class ServerController implements ServerControllerInterface{
             System.exit(1);
         }
         server = new ServerController();
-
+        JpaUtil.init();
         //Get the RMI ready
         try {
             stub = (ServerControllerInterface) UnicastRemoteObject.exportObject(server, 1099);
@@ -68,6 +69,7 @@ public class ServerController implements ServerControllerInterface{
         } catch (Exception e) {
             System.err.println("Error in server controller:" + e);
         }
+        JpaUtil.destroy();
     }
 
     @Override
