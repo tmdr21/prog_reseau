@@ -72,4 +72,12 @@ public class Client extends Addressee{
         return objectInputStream;
     }
 
+    public void addReceivedMessage(Message message){
+        this.messagesReceivedList.add(message);
+    }
+
+    public void addSentMessage(Message message){
+        this.messagesReceivedList.add(message);
+    }
+
 }

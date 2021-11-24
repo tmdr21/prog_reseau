@@ -1,8 +1,10 @@
 package server.threads;
 
+import model.Addressee;
 import model.Client;
 import model.Message;
 import server.controller.ServerController;
+import service.Service;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -33,16 +35,17 @@ public class ClientThread extends Thread{
                         objectOutputStream.writeObject(message);
                     }
                 }else {
-                    try {
-                        findAddressee(message);
-                        //client.addToListOfSentMessages(message);
-                        //message.addressee.addToListOfReceivedMessages(message);
-                    } catch (Exception e) {
+                    Addressee addressee = Service.findAddressee(message.getAddressee().getName());
+                    message.setAddressee(addressee);
+                    Service.messageReceived(addressee, message);
+                    Service.messageSent(client, message);
+                    if(!isOnline(addressee)){
                         objectOutputStream = client.getObjectOutputStream();
                         message = new Message(new Date(), client, null, "This user is not online");
+                    }else{
+                        System.out.println(message);
+                        objectOutputStream.writeObject(message);
                     }
-                    System.out.println(message);
-                    objectOutputStream.writeObject(message);
                 }
             }
         } catch (SocketException se) {
@@ -53,23 +56,3 @@ public class ClientThread extends Thread{
             System.err.println("Error in Client thread:" + e);
         }
     }
-
-    private void findAddressee(Message message) throws Exception{
-        Client addressee = null;
-        try {
-            addressee = server.getClientByName(message.getAddressee().getName());
-            message.setAddressee(addressee);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if(addressee != null){
-            try {
-                objectOutputStream = addressee.getObjectOutputStream();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            throw new Exception();
-        }
-    }
-}

@@ -22,7 +22,13 @@ public class GroupChat extends Addressee{
         super(name);
     }
 
+    @Override
+    public void addReceivedMessage(Message message) {
+        this.messagesExchangedList.add(message);
+    }
+
     public void addClient(Client client){
         listOfMemebers.add(client);
     }
+
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Addressee implements Serializable {
+public abstract class Addressee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long idAddressee;
@@ -28,6 +28,8 @@ public class Addressee implements Serializable {
     public void setName(String name) {
         this.name=name;
     }
+
+    public abstract void addReceivedMessage(Message message);
 
     @Override
     public String toString() {
