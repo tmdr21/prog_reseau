@@ -1,8 +1,13 @@
 package model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Addressee implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long idAddressee;
     private String name;
 
@@ -19,6 +24,9 @@ public class Addressee implements Serializable {
 
     public String getName() {
         return name;
+    }
+    public void setName(String name) {
+        this.name=name;
     }
 
     @Override

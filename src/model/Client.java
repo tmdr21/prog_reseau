@@ -1,15 +1,24 @@
 package model;
 
+import javax.persistence.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
+@Entity
 public class Client extends Addressee{
+    @OneToMany(mappedBy = "sender")
     private List<Message> messagesSentList;
+    @OneToMany(mappedBy = "addressee")
     private List<Message> messagesReceivedList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<GroupChat> groups;
+    @Transient
     private transient Socket socket;
+    @Transient
     private transient ObjectOutputStream objectOutputStream;
+    @Transient
     private transient ObjectInputStream objectInputStream;
 
     public Client(){
