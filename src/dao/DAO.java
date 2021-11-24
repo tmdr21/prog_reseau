@@ -31,6 +31,15 @@ public class DAO {
     }
 
     public static Addressee searchAddresseeByName(String name){
-
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        String jpql="select c from Addressee c where c.name= :name ";
+        TypedQuery query=em.createQuery(jpql, Addressee.class);
+        query.setParameter("name",name);
+        List<Addressee> Users = query.getResultList(); //getsingleresult
+        Addressee result = null;
+        if (!Users.isEmpty()) {
+            result = Users.get(0); // premier de la liste
+        }
+        return result;
     }
 }
