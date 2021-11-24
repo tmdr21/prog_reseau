@@ -7,14 +7,27 @@ import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Thread used to send messages for the client running this thread
+ */
 public class ClientSendThread extends Thread{
+    /**
+     * Client that is running this thread
+     */
     private Client client;
+    /**
+     * Stream used to send the messages
+     */
     private ObjectOutputStream objectOutputStream;
 
+    /**
+     * Constructor of this thread
+     * @param client Client running this thread
+     */
     public ClientSendThread(Client client){
         this.client = client;
     }
-
+    @Override
     public void run(){
         Scanner sc=new Scanner(System.in);
         try {

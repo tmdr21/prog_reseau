@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Controller for the server
+ */
 public class ServerController implements ServerControllerInterface{
     private static HashMap<String, Client> clientHashMap;
     private static ServerSocket listenSocket;

@@ -10,6 +10,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/**
+ * Controller for the client
+ */
 public class ClientController {
 
     public static void main(String[] args) {
