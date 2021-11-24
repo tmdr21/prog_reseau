@@ -5,20 +5,48 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+/**
+ * Class that represents all messages exchanged. We sent objects through our output streams
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
+ */
 public class Message implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    /**
+     * Id for our database
+     */
     private long id;
+    /**
+     * Date in which the message has been sent
+     */
     private Date date;
     @ManyToOne
-    @JoinColumn(name = "addressee_id_addressee")
+    /**
+     * Addressee of this message
+     */
     private Addressee addressee;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sender_id_addressee")
+    /**
+     * Sender of this message
+     */
     private Client sender;
+    /**
+     * Text body of this message
+     */
     private String body;
 
+    /**
+     * Default constructor
+     */
+    public Message(){}
 
+    /**
+     * Creates a new message
+     * @param date Date in which the message has been sent
+     * @param addressee Addressee of this message
+     * @param sender Sender of this message
+     * @param body Text body of this message
+     */
     public Message(Date date, Addressee addressee, Client sender, String body) {
         this.date = date;
         this.addressee = addressee;
@@ -26,28 +54,28 @@ public class Message implements Serializable {
         this.body = body;
     }
 
+    /**
+     * Sets a new addressee for this message
+     * @param addressee new addressee to be set
+     */
     public void setAddressee(Addressee addressee) {
         this.addressee = addressee;
     }
 
-    public long getId() {
-        return id;
-    }
-
+    /**
+     * Gets the date of this message
+     * @return date of the message
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Gets the addressee of this message
+     * @return addressee of this message
+     */
     public Addressee getAddressee() {
         return addressee;
-    }
-
-    public Client getSender() {
-        return sender;
-    }
-
-    public String getBody() {
-        return body;
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 
 /**
  * Controller Interface to send for the RMI
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
 public interface ServerControllerInterface extends Remote {
     /**

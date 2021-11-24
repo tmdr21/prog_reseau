@@ -20,13 +20,33 @@ import java.util.logging.Logger;
 
 /**
  * Controller for the server
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
 public class ServerController implements ServerControllerInterface{
+    /**
+     * Map with all connected clients, we use a map so the searching in this data structure will be in O(1)
+     */
     private static HashMap<String, Client> connectedClientsMap;
+    /**
+     * Socket in which the server will be listening for new connections
+     */
     private static ServerSocket listenSocket;
+    /**
+     * Instance of this server controller
+     */
     private static ServerController server = null;
+    /**
+     * Stub for setting up the RMI
+     */
     private static ServerControllerInterface stub = null;
+    /**
+     * Stream in which the server will be listening
+     */
     private static ObjectInputStream objectInputStream;
+
+    /**
+     * Constructor of the server controller
+     */
     public ServerController(){
         connectedClientsMap = new HashMap<>();
     }
@@ -36,8 +56,11 @@ public class ServerController implements ServerControllerInterface{
             System.exit(1);
         }
         server = new ServerController();
+        try {
+            server.loginClientByName("loo");
+        }catch (Exception e){}
         JpaUtil.init();
-        //Get the RMI ready
+        //Get the RMI ready-----------------------------------------------------------------------------
         try {
             stub = (ServerControllerInterface) UnicastRemoteObject.exportObject(server, 1099);
             Registry registry = LocateRegistry.createRegistry(1099);
@@ -45,8 +68,8 @@ public class ServerController implements ServerControllerInterface{
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println("hello");
-
+        //-----------------------------------------------------------------------------------------------
+        //Accepts a new incoming connection--------------------------------------------------------------
         try {
             listenSocket = new ServerSocket(Integer.parseInt(args[0])); //port
             System.out.println("Server ready...");
@@ -62,6 +85,7 @@ public class ServerController implements ServerControllerInterface{
                 client.setSocket(clientSocket);
                 client.setObjectInputStream(objectInputStream);
                 client.setObjectOutputStream(objectOutputStream);
+                addLoggedInClient(client);
 
                 ClientThread ct = new ClientThread(client, server);
                 ct.start();
@@ -69,6 +93,7 @@ public class ServerController implements ServerControllerInterface{
         } catch (Exception e) {
             System.err.println("Error in server controller:" + e);
         }
+        //-------------------------------------------------------------------------------------------------
         JpaUtil.destroy();
     }
 
@@ -76,17 +101,7 @@ public class ServerController implements ServerControllerInterface{
     public Client loginClientByName(String name) throws RemoteException {
         Client client ;
         JpaUtil.creerContextePersistance();
-        try{
-            JpaUtil.ouvrirTransaction();
-            client = DAO.searchClientByName(name);
-            JpaUtil.validerTransaction();
-        }catch (Exception ex){
-            JpaUtil.annulerTransaction();
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception at find client in service", ex);
-            client = null;
-        } finally {
-            JpaUtil.fermerContextePersistance();
-        }
+        client = DAO.searchClientByName(name);
         if(client == null){
             client = new Client(name);
             try {
@@ -100,18 +115,38 @@ public class ServerController implements ServerControllerInterface{
                 JpaUtil.fermerContextePersistance();
             }
         }
-        connectedClientsMap.put(client.getName(), client);
         return client;
     }
 
+    /**
+     * Finds a connected client by it's name
+     * @param name name of the client to be searched
+     * @return client that matches this name
+     */
     public Client getConnectedClientByName(String name){
         return connectedClientsMap.get(name);
     }
 
+    /**
+     * Adds a new client to the logged clients map
+     * @param client client to be added
+     */
+    public static void addLoggedInClient(Client client){
+        connectedClientsMap.put(client.getName(), client);
+    }
+
+    /**
+     * Gets a map of all connected clients, used for broadcasting purposes
+     * @return
+     */
     public static HashMap<String, Client> getConnectedClientsMap() {
         return connectedClientsMap;
     }
 
+    /**
+     * Takes out a client from the connected clients map when this one leaves the server
+     * @param client client that left the server
+     */
     public void logOut(Client client){
         connectedClientsMap.remove(client.getName());
     }

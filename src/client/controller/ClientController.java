@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 /**
  * Controller for the client
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
 public class ClientController {
 

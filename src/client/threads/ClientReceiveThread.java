@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 
 /**
  * Thread in charge of receiving messages for each client
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
 public class ClientReceiveThread extends Thread{
     /**
@@ -31,6 +32,7 @@ public class ClientReceiveThread extends Thread{
             objectInputStream = client.getObjectInputStream();
             while (true) {
                 Message message = (Message) objectInputStream.readObject();
+                client.addReceivedMessage(message);
                 System.out.println("\n" + message);
             }
         } catch (Exception e) {

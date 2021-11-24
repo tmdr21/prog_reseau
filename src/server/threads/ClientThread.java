@@ -14,17 +14,38 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Thread that handles all the requests incoming from a given client. To be run by the server
+ * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
+ */
 public class ClientThread extends Thread {
+    /**
+     * Input stream in which the server listens to messages sent by a given client
+     */
     private ObjectInputStream objectInputStream;
+    /**
+     * Output stream in which the server needs to write a given message
+     */
     private ObjectOutputStream objectOutputStream;
+    /**
+     * Client handled by this thread, all messages here comme from this client
+     */
     private Client client;
+    /**
+     * Server controller that created and run this thread
+     */
     private ServerController server;
 
+    /**
+     * Constructor
+     * @param client client that needs to be handeled and listened
+     * @param server Server controller that created and run this thread
+     */
     public ClientThread(Client client, ServerController server) {
         this.server = server;
         this.client = client;
     }
-
+    @Override
     public void run() {
         try {
             objectInputStream = client.getObjectInputStream();
@@ -38,19 +59,23 @@ public class ClientThread extends Thread {
                         objectOutputStream.writeObject(message);
                     }
                 } else {
-                    Addressee addressee = Service.findAddressee(message.getAddressee().getName());
+                    Addressee addressee = server.getConnectedClientByName(message.getAddressee().getName());
                     message.setAddressee(addressee);
-                    Service.messageReceived(addressee, message);
-                    Service.messageSent(client, message);
-                    if (server.getConnectedClientByName(addressee.getName())==null) {
+                    if (addressee==null) {
                         objectOutputStream = client.getObjectOutputStream();
                         message = new Message(new Date(), client, null, "This user is not online");
+                        objectOutputStream.writeObject(message);
                     }else{
+                        //Service.createMessage(message);
+                        Service.messageReceived(message);
+                        //Service.messageSent(client, message);
                         if(addressee instanceof Client) {
+                            objectOutputStream = ((Client) addressee).getObjectOutputStream();
                             System.out.println(message);
                             objectOutputStream.writeObject(message);
                         }else if(addressee instanceof GroupChat){
-                            //Broadcast message to all group members
+                            //Message to be sent to all group members
+                            //Not yet implemented
                         }
                     }
                 }

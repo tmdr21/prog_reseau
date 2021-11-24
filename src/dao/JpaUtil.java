@@ -13,7 +13,7 @@ import javax.persistence.RollbackException;
  * l'unité de persistance (PERSISTENCE_UNIT_NAME) doit être conforme à la
  * configuration indiquée dans le fichier persistence.xml du projet.
  *
- * @author DASI Team
+ * @author DASI Team, Yann Gripay Sylvie Servigne Anne Tchounikine
  */
 public class JpaUtil {
 
