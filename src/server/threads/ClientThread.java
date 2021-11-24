@@ -35,6 +35,8 @@ public class ClientThread extends Thread{
                 }else {
                     try {
                         findAddressee(message);
+                        //client.addToListOfSentMessages(message);
+                        //message.addressee.addToListOfReceivedMessages(message);
                     } catch (Exception e) {
                         objectOutputStream = client.getObjectOutputStream();
                         message = new Message(new Date(), client, null, "This user is not online");
