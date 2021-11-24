@@ -10,47 +10,49 @@ import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity
 /**
  * Class that represents a client
  * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
+@Entity
 public class Client extends Addressee{
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
     /**
      * List of all messages sent
      */
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Message> messagesSentList = new LinkedList<>();
 
-    @OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
     /**
      * List of all messages received
      */
+    @OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Message> messagesReceivedList = new LinkedList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
     /**
      * List of all the group chat to which this client belongs
      */
+    @ManyToMany(cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<GroupChat> groups = new LinkedList<>();
 
-    @Transient
     /**
      * Socket to communicate with this client or to communicate with the server
      */
-    private transient Socket socket;
     @Transient
+    private transient Socket socket;
+
     /**
      * Output stream to send messages to the server or to this client
      */
-    private transient ObjectOutputStream objectOutputStream;
     @Transient
+    private transient ObjectOutputStream objectOutputStream;
+
     /**
      * Input stream so this client can receive messages from the server
      */
+    @Transient
     private transient ObjectInputStream objectInputStream;
 
     /**

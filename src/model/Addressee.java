@@ -3,18 +3,19 @@ package model;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 /**
  * Abstract class that represents an addressee, which can be a client or a group chat
  * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Addressee implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     /**
      * Id for the database
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long idAddressee;
     /**
      * Name of the addressee

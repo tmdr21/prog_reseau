@@ -50,6 +50,11 @@ public class ServerController implements ServerControllerInterface{
     public ServerController(){
         connectedClientsMap = new HashMap<>();
     }
+
+    /**
+     * Entry point for the server
+     * @param args program arguments
+     */
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java EchoServer <EchoServer port>");
@@ -137,7 +142,7 @@ public class ServerController implements ServerControllerInterface{
 
     /**
      * Gets a map of all connected clients, used for broadcasting purposes
-     * @return
+     * @return the map of all connected clients
      */
     public static HashMap<String, Client> getConnectedClientsMap() {
         return connectedClientsMap;

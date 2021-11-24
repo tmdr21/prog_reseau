@@ -3,25 +3,26 @@ package model;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity
 /**
  * Class that represents a group chat, in which there can be several clients
  * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
+@Entity
 public class GroupChat extends Addressee{
-    @ManyToMany
+
     /**
      * List of all clients belonging to this group chat
      */
+    @ManyToMany
     private List<Client> listOfMemebers;
-    @OneToMany(mappedBy = "addressee")
+
     /**
      * List of all messages exchanged in this group chat
      */
+    @OneToMany(mappedBy = "addressee")
     private List<Message> messagesExchangedList = new LinkedList<>();
 
     /**

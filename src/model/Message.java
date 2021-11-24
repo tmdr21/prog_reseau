@@ -4,32 +4,37 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
 /**
  * Class that represents all messages exchanged. We sent objects through our output streams
  * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
+@Entity
 public class Message implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     /**
      * Id for our database
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     /**
      * Date in which the message has been sent
      */
     private Date date;
-    @ManyToOne
+
     /**
      * Addressee of this message
      */
+    @ManyToOne
     private Addressee addressee;
-    @ManyToOne(cascade = CascadeType.ALL)
+
     /**
      * Sender of this message
      */
+    @ManyToOne(cascade = CascadeType.ALL)
     private Client sender;
+
     /**
      * Text body of this message
      */

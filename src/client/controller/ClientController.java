@@ -15,7 +15,10 @@ import java.util.Scanner;
  * @author Ithan Velarde, Taha Mdarhri, Aichetou M'Bareck
  */
 public class ClientController {
-
+    /**
+     * Entry point for the client
+     * @param args program arguments
+     */
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         if(args.length != 2){
