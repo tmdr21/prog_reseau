@@ -1,14 +1,24 @@
 package model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
+@Table(name = "Message")
 public class Message implements Serializable {
+    @Id
+    @GeneratedValue
     private long id;
     private Date date;
+    @ManyToOne
+    @JoinColumn(name = "addressee_id_addressee")
     private Addressee addressee;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sender_id_addressee")
     private Client sender;
     private String body;
+
 
     public Message(Date date, Addressee addressee, Client sender, String body) {
         this.date = date;
