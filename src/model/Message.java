@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "Message")
 public class Message implements Serializable {
     @Id
     @GeneratedValue

@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "GroupChat")
 public class GroupChat extends Addressee{
     @ManyToMany
     private List<Client> listOfMemebers;

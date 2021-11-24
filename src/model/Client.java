@@ -7,13 +7,12 @@ import java.net.Socket;
 import java.util.List;
 
 @Entity
-@Table(name = "Client")
 public class Client extends Addressee{
     @OneToMany(mappedBy = "sender")
     private List<Message> messagesSentList;
     @OneToMany(mappedBy = "addressee")
     private List<Message> messagesReceivedList;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<GroupChat> groups;
     @Transient
     private transient Socket socket;
