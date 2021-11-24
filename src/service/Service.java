@@ -11,12 +11,21 @@ import java.util.logging.Logger;
 
 public class Service {
 
-    public Client logInClient(String name){
-
-    }
-
-    public Addressee findAddressee(String name){
-        
+    public static Addressee findAddressee(String name){
+        JpaUtil.creerContextePersistance();
+        Addressee add ;
+        try{
+            JpaUtil.ouvrirTransaction();
+            add = DAO.searchAddresseeByName(name);
+            JpaUtil.validerTransaction();
+        }catch (Exception ex){
+            JpaUtil.annulerTransaction();
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception at find addressee in service", ex);
+            add = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return add;
     }
 
     public static Client messageSent(Client client, Message message){

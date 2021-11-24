@@ -1,5 +1,6 @@
 package server.controller;
 
+import dao.DAO;
 import dao.JpaUtil;
 import model.Client;
 import server.threads.ClientThread;
@@ -13,21 +14,21 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller for the server
  */
 public class ServerController implements ServerControllerInterface{
-    private static HashMap<String, Client> clientHashMap;
+    private static HashMap<String, Client> connectedClientsMap;
     private static ServerSocket listenSocket;
     private static ServerController server = null;
     private static ServerControllerInterface stub = null;
     private static ObjectInputStream objectInputStream;
-    private static List<Client> connectedClients = new LinkedList<>();
     public ServerController(){
-        clientHashMap = new HashMap<>();
+        connectedClientsMap = new HashMap<>();
     }
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -62,7 +63,6 @@ public class ServerController implements ServerControllerInterface{
                 client.setObjectInputStream(objectInputStream);
                 client.setObjectOutputStream(objectOutputStream);
 
-                connectClient(client);
                 ClientThread ct = new ClientThread(client, server);
                 ct.start();
             }
@@ -74,28 +74,45 @@ public class ServerController implements ServerControllerInterface{
 
     @Override
     public Client loginClientByName(String name) throws RemoteException {
-        Client client = clientHashMap.get(name);
-        if(client == null){
-            //Create a new client
-            client = new Client(100, name);
+        Client client ;
+        JpaUtil.creerContextePersistance();
+        try{
+            JpaUtil.ouvrirTransaction();
+            client = DAO.searchClientByName(name);
+            JpaUtil.validerTransaction();
+        }catch (Exception ex){
+            JpaUtil.annulerTransaction();
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception at find client in service", ex);
+            client = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
         }
+        if(client == null){
+            client = new Client(name);
+            try {
+                JpaUtil.ouvrirTransaction();
+                DAO.createClient(client);
+                JpaUtil.validerTransaction();
+            }catch (Exception e){
+                JpaUtil.annulerTransaction();
+                Logger.getAnonymousLogger().log(Level.WARNING, "Exception at create client in service", e);
+            }finally {
+                JpaUtil.fermerContextePersistance();
+            }
+        }
+        connectedClientsMap.put(client.getName(), client);
         return client;
     }
 
-    public static void connectClient(Client client){
-        clientHashMap.put(client.getName(), client);
-        connectedClients.add(client);
+    public Client getConnectedClientByName(String name){
+        return connectedClientsMap.get(name);
     }
 
-    public Client getClientByName(String name){
-        return clientHashMap.get(name);
-    }
-
-    public static List<Client> getConnectedClients() {
-        return connectedClients;
+    public static HashMap<String, Client> getConnectedClientsMap() {
+        return connectedClientsMap;
     }
 
     public void logOut(Client client){
-        connectedClients.remove(client);
+        connectedClientsMap.remove(client.getName());
     }
 }
